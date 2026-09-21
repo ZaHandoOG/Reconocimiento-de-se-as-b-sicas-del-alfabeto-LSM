@@ -16,4 +16,4 @@ El sistema implementa un enfoque de **evaluación comparativa dual**:
 1. **Red Neuronal Convolucional (CNN):** Entrenada con el dataset *Sign Language MNIST* para inferencia directa sobre representaciones tensoriales de $28 \times 28$ píxeles en escala de grises.
 2. **Clasificador Basado en Coordenadas Esqueléticas:** Extracción y normalización de 21 landmarks articulares tridimensionales por mano (vector de 126 características) mediante *MediaPipe Hands*, clasificados con un ensamble de *Random Forest*.
 
-Incluye despliegues interactivos desacoplados mediante **Streamlit** y **Gradio**, con procesamiento de cámara web en vivo, corrección de lateralidad/espejo y panel de métricas probabilísticas.
+Incluye despliegues interactivos desacoplados mediante **Streamlit**
