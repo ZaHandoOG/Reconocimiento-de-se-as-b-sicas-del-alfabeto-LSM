@@ -1,5 +1,3 @@
-# Reconocimiento-de-se-as-b-sicas-del-alfabeto-LSM
-Sistema de visión por computadora para reconocimiento y traducción de Lengua de Señas en tiempo real. Evaluación comparativa entre una CNN (Sign Language MNIST) y Random Forest sobre landmarks articulares con MediaPipe Hands, desplegado interactivamente en Streamlit.
 # 🤟 Sistema de Reconocimiento de Lengua de Señas (LSM / ASL) en Tiempo Real
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)](https://www.python.org/)
