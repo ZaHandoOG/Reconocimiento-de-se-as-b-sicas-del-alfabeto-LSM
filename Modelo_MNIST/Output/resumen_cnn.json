@@ -1,0 +1,8 @@
+{
+  "modelo": "CNN (Sign Language MNIST)",
+  "accuracy": 0.9967930842163971,
+  "macro_f1": 0.9963057649009871,
+  "macro_precision": 0.996751367845118,
+  "macro_recall": 0.9961330208060145,
+  "n_muestras_test": 7172
+}

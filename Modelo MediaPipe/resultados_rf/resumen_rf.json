@@ -1,0 +1,8 @@
+{
+  "modelo": "Random Forest (MediaPipe landmarks)",
+  "accuracy": 0.9260869565217391,
+  "macro_f1": 0.925935391839282,
+  "macro_precision": 0.932981993851559,
+  "macro_recall": 0.9260869565217391,
+  "n_muestras_test": 230
+}
