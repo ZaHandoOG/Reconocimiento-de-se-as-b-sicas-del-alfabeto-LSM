@@ -1,17 +1,82 @@
-# 🤟 Sistema de Reconocimiento de Lengua de Señas (LSM / ASL) en Tiempo Real
+# 🤟 Sistema de Reconocimiento de Lengua de Señas (LSM / ASL)
 
-[![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)](https://www.python.org/)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.16.2-orange?logo=tensorflow)](https://www.tensorflow.org/)
-[![MediaPipe](https://img.shields.io/badge/MediaPipe-0.10.14-teal)](https://developers.google.com/mediapipe)
-[![Streamlit](https://img.shields.io/badge/Streamlit-App-red?logo=streamlit)](https://streamlit.io/)
-[![Gradio](https://img.shields.io/badge/Gradio-Demo-yellow)](https://www.gradio.app/)
+Sistema de visión artificial para clasificación e inferencia en tiempo real de señas estáticas del alfabeto dactilológico. El proyecto implementa y compara dos enfoques arquitectónicos: una Red Neuronal Convolucional (CNN) sobre imágenes 28x28 y un ensamble de Random Forest sobre coordenadas articulares tridimensionales (MediaPipe Hands), complementado con despliegues interactivos en Streamlit y Gradio.
 
-## 📌 Descripción del Proyecto
+---
 
-Este proyecto desarrolla e implementa un sistema integral de **visión artificial y aprendizaje automático** enfocado en la clasificación estática de señas del alfabeto de Lengua de Señas (LSM / ASL). 
+## 📊 Arquitectura y Enfoques Comparados
 
-El sistema implementa un enfoque de **evaluación comparativa dual**:
-1. **Red Neuronal Convolucional (CNN):** Entrenada con el dataset *Sign Language MNIST* para inferencia directa sobre representaciones tensoriales de $28 \times 28$ píxeles en escala de grises.
-2. **Clasificador Basado en Coordenadas Esqueléticas:** Extracción y normalización de 21 landmarks articulares tridimensionales por mano (vector de 126 características) mediante *MediaPipe Hands*, clasificados con un ensamble de *Random Forest*.
+El sistema evalúa dos metodologías distintas para el reconocimiento gestual:
 
-Incluye despliegues interactivos desacoplados mediante **Streamlit**
+| Característica | Enfoque 1: CNN (Deep Learning) | Enfoque 2: MediaPipe + Random Forest |
+| :--- | :--- | :--- |
+| **Dataset de Origen** | Sign Language MNIST (27k train / 7k test) | Dataset customizado (`dataset_lsm.csv`) |
+| **Entrada del Modelo** | Matriz de píxeles en escala de grises ($28 \times 28 \times 1$) | Vector normalizado de 126 variables espaciales |
+| **Representación** | Espacio denso de píxeles | Coordenadas $(x, y, z)$ relativas a la muñeca |
+| **Clasificador** | Red Convolucional (Conv2D + MaxPool + Dropout) | Random Forest Classifier (100 estimadores) |
+| **Invarianza al Entorno**| Sensible al fondo, iluminación y textura | Invariante a luz y fondo; enfocado en geometría |
+| **Inferencia** | Requiere encuadre en Región de Interés (ROI) | Libre posicionamiento en el encuadre de la cámara |
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+* **Lenguaje:** Python 3.11
+* **Deep Learning & ML:** TensorFlow 2.16.2, Scikit-Learn
+* **Visión Artificial:** OpenCV 4.11, MediaPipe 0.10.14
+* **Interfaces de Despliegue:** Streamlit, Gradio
+* **Procesamiento de Datos:** NumPy, Pandas
+
+---
+
+## 🚀 Instalación y Entorno
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/TU_USUARIO/TU_REPOSITORIO.git](https://github.com/TU_USUARIO/TU_REPOSITORIO.git)
+   cd TU_REPOSITORIO
+   ```
+
+2. **Crear y activar un entorno virtual (recomendado):**
+   ```bash
+   python -m venv venv
+   # En Windows:
+   .\venv\Scripts\activate
+   ```
+
+3. **Instalar dependencias:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+   > *Nota de compatibilidad:* Se fuerza la instalación de `protobuf==4.25.3` para garantizar la interoperabilidad entre TensorFlow 2.16.2 y MediaPipe 0.10.14.
+
+---
+
+## 🖥️ Ejecución de los Despliegues
+
+El proyecto incluye dos interfaces gráficas completas con soporte para transmisión de cámara web en vivo:
+
+### Opción A: Despliegue en Streamlit
+Incluye panel de control, umbral de aceptación ajustable, vista previa de ROI ($28 \times 28$) y visualización en tiempo real:
+```bash
+streamlit run App.py
+```
+
+### Opción B: Despliegue en Gradio
+Permite streaming directo y modo de evaluación sobre imágenes estáticas con diagnóstico de probabilidades Top-3:
+```bash
+python AppGradio.py
+```
+
+---
+
+## 🔬 Consideraciones Técnicas de Implementación
+
+1. **Mapeo de Clases en Sign Language MNIST:**  
+   El dataset original excluye las letras 'J' (índice 9) y 'Z' (índice 25) debido a su naturaleza dinámica. La capa de salida de la CNN maneja 25 neuronas activas; la interfaz implementa un mapeo seguro para evitar desbordamientos de índice al predecir la letra 'Y' (índice 24).
+
+2. **Corrección de Modo Espejo en MediaPipe:**  
+   Al aplicar `cv2.flip(frame, 1)` para un espejo natural del usuario, las etiquetas de lateralidad se invierten. El script incorpora una reasignación lógica para asegurar que los 63 landmarks de la mano derecha física se ubiquen consistentemente en las posiciones 64 a 126 del vector de características.
+
+3. **Filtrado Temporal:**  
+   Ambos despliegues integran un buffer rodante (`deque`) que calcula la moda estadística de las últimas predicciones, estabilizando la salida en pantalla y eliminando el parpadeo de falsos positivos entre cuadros consecutivos.
