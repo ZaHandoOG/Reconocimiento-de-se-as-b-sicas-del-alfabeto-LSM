@@ -1,0 +1,21 @@
+# Entornos virtuales
+venv/
+env/
+.env
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Checkpoints y temporales de TensorFlow / MediaPipe
+.ipynb_checkpoints/
+*.log
+
+# Archivos pesados de datasets crudos (evitar bloqueo de Git)
+*.csv.zip
+data/sign_mnist_train.csv
+
+# Carpetas de configuración de IDEs
+.vscode/
+.idea/
