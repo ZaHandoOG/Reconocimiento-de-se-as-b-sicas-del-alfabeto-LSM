@@ -1,0 +1,13 @@
+  train: ../train/images
+  val: ../valid/images
+  test: ../test/images
+
+  nc: 27
+  names: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 'rr', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+  roboflow:
+    workspace: hexagun
+    project: lengua-de-senas-mexicana-sgzpi
+    version: 3
+    license: Public Domain
+    url: https://universe.roboflow.com/hexagun/lengua-de-senas-mexicana-sgzpi/dataset/3
