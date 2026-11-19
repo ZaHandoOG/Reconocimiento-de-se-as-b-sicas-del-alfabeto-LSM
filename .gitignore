@@ -8,13 +8,33 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Checkpoints y temporales de TensorFlow / MediaPipe
+# Checkpoints y temporales
 .ipynb_checkpoints/
 *.log
+*.swp
+*.swo
 
-# Archivos pesados de datasets crudos (evitar bloqueo de Git)
+# Archivos de Office temporales
+~$*
+
+# Datasets pesados (se descargan aparte, ver README)
 *.csv.zip
-data/sign_mnist_train.csv
+*.zip
+Modelo_MNIST/Dataset/sign_mnist_train.csv
+
+# YOLO: dataset exportado de Roboflow (imágenes con personas) y archivos pesados
+YOLO/*/train/
+YOLO/*/valid/
+YOLO/*/test/
+YOLO/*/README.dataset.txt
+YOLO/*/modelo_lsm_v1/
+# YOLO: se conserva best.pt; last.pt y los lotes con rostros no se suben
+YOLO/*/*/weights/last.pt
+YOLO/*/*/train_batch*.jpg
+YOLO/*/*/val_batch*.jpg
+
+# Versión anterior (reemplazada) del reporte del Parcial 2
+Reporte_Parcial2_LSM_YOLO.docx
 
 # Carpetas de configuración de IDEs
 .vscode/

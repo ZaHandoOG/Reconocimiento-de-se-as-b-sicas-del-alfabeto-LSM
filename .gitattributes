@@ -1,0 +1,7 @@
+* text=auto
+*.pt binary
+*.pkl binary
+*.keras binary
+*.task binary
+*.pdf binary
+*.docx binary
