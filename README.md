@@ -1,10 +1,31 @@
-# 🤟 Sistema de Reconocimiento de Lengua de Señas (LSM / ASL)
+# 🤟 Reconocimiento del alfabeto de la Lengua de Señas Mexicana (LSM)
 
-Sistema de visión artificial para clasificación e inferencia en tiempo real de señas estáticas del alfabeto dactilológico. El proyecto implementa y compara dos enfoques arquitectónicos: una Red Neuronal Convolucional (CNN) sobre imágenes 28x28 y un ensamble de Random Forest sobre coordenadas articulares tridimensionales (MediaPipe Hands), complementado con despliegues interactivos en Streamlit y Gradio.
+Proyecto de Visión por Computadora (Universidad Modelo) que reconoce las letras del alfabeto en Lengua de Señas Mexicana. Ha pasado por tres etapas: (1) una comparación entre una CNN sobre imágenes 28x28 y un Random Forest sobre puntos de la mano (MediaPipe); (2) captura automática de letras con salida a texto y voz en español; y (3) un detector YOLO entrenado con un dataset de LSM de Roboflow, que es la versión más reciente.
 
 ---
 
-## 📊 Arquitectura y Enfoques Comparados
+## 🧭 Etapas del proyecto
+
+| Etapa | Carpeta | Qué hace |
+| :--- | :--- | :--- |
+| Parcial 1 | `Modelo_MNIST/`, `Modelo MediaPipe/`, `Evaluate/` | CNN (Sign Language MNIST) contra MediaPipe + Random Forest |
+| Avance 1 | `Modelo MediaPipe/Camra_En_Vivo.py` | Captura automática de letras, texto y voz en español |
+| Parcial 2 (actual) | `YOLO/` | Detector YOLOv8 entrenado con el dataset de Roboflow (27 clases: a-z y rr) |
+| Reportes | `Reportes/` | Reportes entregados en PDF y Word |
+
+### 🟢 YOLO (versión más reciente)
+
+* **Modelo:** YOLOv8n (Ultralytics), 50 épocas, imágenes de 640 px, con aumentación de datos.
+* **Dataset:** [Lengua de Señas Mexicana (Roboflow)](https://universe.roboflow.com/datasetbyte/lengua-de-senas-mexicana). El dataset **no se sube** al repo (son miles de imágenes con personas); se descarga en formato YOLOv8 y se coloca en `YOLO/Lengua de Senas Mexicana.v3i.yolov8/` con las carpetas `train/`, `valid/` y `test/`.
+* **Resultado en validación:** mAP@50 de aproximadamente 0.71 (mejor época: la 48). Las curvas y la matriz de confusión están en `YOLO/.../modelo_lsm_v1-2/`, y los pesos entrenados en `weights/best.pt`.
+* **Reentrenar:** `python train.py` desde la carpeta del dataset. Ajusta las rutas absolutas y `device` dentro del script (usa `device="cpu"` si no tienes GPU NVIDIA).
+* **Cámara en vivo:** `python run.py`. En el script hay que apuntar `model_path` a `weights/best.pt`; la voz usa pyttsx3 con una voz en español instalada en Windows.
+
+> Nota: los mAP de YOLO (detección) no son directamente comparables con la exactitud de la CNN o del Random Forest (clasificación), así que la comparación con ellos es cualitativa.
+
+---
+
+## 📊 Parcial 1: Enfoques Comparados (CNN vs Random Forest)
 
 El sistema evalúa dos metodologías distintas para el reconocimiento gestual:
 
@@ -22,9 +43,9 @@ El sistema evalúa dos metodologías distintas para el reconocimiento gestual:
 ## 🛠️ Tecnologías Utilizadas
 
 * **Lenguaje:** Python 3.11
-* **Deep Learning & ML:** TensorFlow 2.16.2, Scikit-Learn
+* **Deep Learning & ML:** TensorFlow 2.16.2, Scikit-Learn, Ultralytics YOLOv8
 * **Visión Artificial:** OpenCV 4.11, MediaPipe 0.10.14
-* **Interfaces de Despliegue:** Streamlit, Gradio
+* **Interfaces de Despliegue:** Streamlit, OpenCV (cámara en vivo), pyttsx3 (voz)
 * **Procesamiento de Datos:** NumPy, Pandas
 
 ---
@@ -33,8 +54,8 @@ El sistema evalúa dos metodologías distintas para el reconocimiento gestual:
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone [https://github.com/TU_USUARIO/TU_REPOSITORIO.git](https://github.com/TU_USUARIO/TU_REPOSITORIO.git)
-   cd TU_REPOSITORIO
+   git clone https://github.com/ZaHandoOG/Reconocimiento-de-se-as-b-sicas-del-alfabeto-LSM.git
+   cd Reconocimiento-de-se-as-b-sicas-del-alfabeto-LSM
    ```
 
 2. **Crear y activar un entorno virtual (recomendado):**
@@ -52,21 +73,27 @@ El sistema evalúa dos metodologías distintas para el reconocimiento gestual:
 
 ---
 
-## 🖥️ Ejecución de los Despliegues
+## 🖥️ Ejecución
 
-El proyecto incluye dos interfaces gráficas completas con soporte para transmisión de cámara web en vivo:
-
-### Opción A: Despliegue en Streamlit
-Incluye panel de control, umbral de aceptación ajustable, vista previa de ROI ($28 \times 28$) y visualización en tiempo real:
+### Streamlit (CNN y Random Forest)
+Panel de control, umbral de aceptación ajustable, vista previa de ROI ($28 \times 28$) y visualización en tiempo real:
 ```bash
-streamlit run App.py
+streamlit run App_Streamlit.py
 ```
 
-### Opción B: Despliegue en Gradio
-Permite streaming directo y modo de evaluación sobre imágenes estáticas con diagnóstico de probabilidades Top-3:
+### Cámara en vivo con MediaPipe + Random Forest
 ```bash
-python AppGradio.py
+python "Modelo MediaPipe/Camra_En_Vivo.py"
 ```
+
+### Cámara en vivo con YOLO
+```bash
+python "YOLO/Lengua de Senas Mexicana.v3i.yolov8/run.py"
+```
+
+### Datos que no están en el repositorio
+* **Sign Language MNIST** (`sign_mnist_train.csv`, 81 MB): descárgalo de [Kaggle](https://www.kaggle.com/datasets/datamunge/sign-language-mnist) y colócalo en `Modelo_MNIST/Dataset/`.
+* **Dataset de YOLO:** ver la sección de YOLO.
 
 ---
 
